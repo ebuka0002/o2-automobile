@@ -1,0 +1,100 @@
+@import "tailwindcss";
+
+@theme inline {
+  --font-display: "Barlow Condensed", "Arial Narrow", sans-serif;
+  --font-sans: "Manrope", system-ui, sans-serif;
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface2: var(--surface-2);
+  --color-line: var(--line);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-accent-hi: var(--accent-hi);
+  --color-on-accent: var(--on-accent);
+  --color-scrim: var(--scrim);
+}
+
+/* Dark is the default. Light is a designed paper-and-ink palette, not an inversion. */
+:root,
+[data-theme="dark"] {
+  --bg: #0c0d0f;
+  --surface: #14161a;
+  --surface-2: #1b1e23;
+  --line: #2a2e35;
+  --fg: #f1efea;
+  --muted: #9a9fa8;
+  --accent: #c9a76b;
+  --accent-hi: #dcc08a;
+  --on-accent: #15110a;
+  --scrim: rgba(6, 7, 8, 0.74);
+  color-scheme: dark;
+}
+[data-theme="light"] {
+  --bg: #efede9;
+  --surface: #f9f8f6;
+  --surface-2: #e6e3dd;
+  --line: #d3cfc6;
+  --fg: #131416;
+  --muted: #585d66;
+  --accent: #8c6a2c;
+  --accent-hi: #a5803c;
+  --on-accent: #fffaf0;
+  --scrim: rgba(20, 20, 22, 0.55);
+  color-scheme: light;
+}
+/* Hero, CTA and footer stay dark in both themes so imagery keeps its drama. */
+.stage {
+  --bg: #0c0d0f;
+  --surface: #14161a;
+  --surface-2: #1b1e23;
+  --line: #2a2e35;
+  --fg: #f1efea;
+  --muted: #9a9fa8;
+  --accent: #c9a76b;
+  --accent-hi: #dcc08a;
+  --on-accent: #15110a;
+  color: var(--fg);
+  background-color: var(--bg);
+}
+
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+[id] { scroll-margin-top: 5.5rem; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+option { background: var(--surface); color: var(--fg); }
+::selection { background: var(--accent); color: var(--on-accent); }
+
+@layer components {
+  .container-x { @apply mx-auto w-full max-w-[1360px] px-5 md:px-10; }
+  .label { @apply text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-accent; }
+  .h-display { @apply font-display font-bold uppercase leading-[0.92] tracking-[-0.005em]; }
+  .btn { @apply inline-flex min-h-12 items-center justify-center gap-2 px-6 text-sm font-semibold tracking-wide transition-colors duration-200 disabled:cursor-not-allowed disabled:opacity-60; }
+  .btn-primary { @apply bg-accent text-on-accent hover:bg-accent-hi; }
+  .btn-outline { @apply border border-fg/35 text-fg hover:border-accent hover:text-accent; }
+  .btn-quiet { @apply text-muted hover:text-fg; }
+  .field { @apply h-12 w-full border border-line bg-surface px-4 text-sm text-fg outline-none transition-colors placeholder:text-muted focus:border-accent; }
+  textarea.field { @apply h-auto min-h-28 py-3; }
+  .field[aria-invalid="true"] { border-color: #e0654f; }
+  .skeleton { @apply relative overflow-hidden bg-surface2; }
+  .skeleton::after {
+    content: ""; position: absolute; inset: 0;
+    background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--fg) 8%, transparent), transparent);
+    transform: translateX(-100%); animation: shimmer 1.4s infinite;
+  }
+  .no-scrollbar { scrollbar-width: none; }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+}
+@keyframes shimmer { to { transform: translateX(100%); } }
+@keyframes scroll-cue { 0%, 100% { transform: translateY(0); opacity: 0.4; } 50% { transform: translateY(8px); opacity: 1; } }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+}
